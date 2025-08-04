@@ -19,6 +19,8 @@ A lightweight, debug console component for React applications that provides an e
 - 🚀 **External Debug Console** - Overlay console that doesn't interfere with your app's UI
 - 📱 **Mobile-Friendly** - Optimized for mobile devices with touch-friendly interface
 - 🔧 **Interactive REPL** - Execute JavaScript code directly in the console
+- 💾 **Global Temp Storage** - Save objects to global scope when clicked (like devtools)
+- 🛡️ **Failsafe Stringification** - Safe stringification of all values
 
 
 </td>
