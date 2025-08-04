@@ -40,7 +40,7 @@ function App() {
 </td>
 <td width="40%" align="center">
 
-![Demo](https://mobile-console.teniryte.ru/demo.png)
+<img src="https://mobile-console.teniryte.ru/demo.png" width="500">
 
 </td>
 </tr>
