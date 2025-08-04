@@ -1,6 +1,6 @@
 {
   "name": "react-mobile-console",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "An external debug console component for React apps",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
@@ -26,7 +26,7 @@
     "typescript": "^5.4.0"
   },
   "dependencies": {
-    "kit": "2.0.25",
+    "kit": "^2.0.26",
     "uuid": "^11.1.0"
   }
 }
