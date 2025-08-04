@@ -2,13 +2,15 @@
 
 # react-mobile-console
 
+A lightweight, debug console component for React applications that provides an external debugging interface similar to browser developer tools. Perfect for mobile development, testing, and debugging React apps in various environments.
+
 <a href="https://mobile-console.teniryte.ru">View Demo</a>
 
 <table>
 <tr>
 <td width="60%" valign="top">
 
-A lightweight, debug console component for React applications that provides an external debugging interface similar to browser developer tools. Perfect for mobile development, testing, and debugging React apps in various environments.
+## How it works:
 
 > When the component mounts, the global `console` object methods (`log`, `info`, `debug`, `time`, `timeEnd`) are replaced with MobileConsole methods. When the component unmounts, the original methods are restored. **Only for dev and test environments**!
 
