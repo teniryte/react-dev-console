@@ -21,13 +21,12 @@
   },
   "devDependencies": {
     "@types/styled-components": "^5.1.34",
+    "@types/uuid": "^10.0.0",
     "tsup": "^7.2.0",
     "typescript": "^5.4.0"
   },
   "dependencies": {
-    "@types/uuid": "^10.0.0",
-    "kit": "^2.0.17",
-    "uuid": "^11.1.0",
-    "uuidv4": "^6.2.13"
+    "kit": "2.0.18",
+    "uuid": "^11.1.0"
   }
 }

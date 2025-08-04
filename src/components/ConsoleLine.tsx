@@ -45,7 +45,6 @@ const StyledLine = styled.div<{ type: LineTypeEnum }>`
       case LineTypeEnum.Log:
         return 'oklch(86.9% 0.022 252.894)';
       case LineTypeEnum.Error:
-        // return 'rgba(255, 0, 0, 0.6)';
         return 'rgba(255, 255, 255, 0.6)';
       case LineTypeEnum.Info:
         return '#1e88e5';

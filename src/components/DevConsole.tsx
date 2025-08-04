@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { ConsoleValue } from './ConsoleValue';
 import { LineType } from '../types/line.type';
 import {
+  startTransition,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -12,6 +12,7 @@ import { LineTypeEnum } from '../types/line-type.enum';
 import { ConsoleLine } from './ConsoleLine';
 import { v4 as uuidv4 } from 'uuid';
 import { formatTime } from '../util/format-time';
+import { ConsolePrompt } from './ConsolePrompt';
 
 const TIMERS: Record<string, number> = {};
 
@@ -24,14 +25,10 @@ const StyledDevConsole = styled.div`
   overflow-y: auto;
   height: 35vh;
   background: oklch(20.8% 0.042 265.755);
-  // background: #272727;
   box-sizing: border-box;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 35px;
+  padding-bottom: 40px;
   color: #fff;
-  overflow-y: auto;
-
-  max-height: 200px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -55,29 +52,11 @@ const StyledDevConsole = styled.div`
   scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 `;
 
-const StyledPrompt = styled.div`
-  box-sizing: border-box;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  right: 0;
-
-  input {
-    border: none;
-    background: darken(#263238dd, 5%);
-    font-family: 'Roboto Mono';
-    padding: 10px;
-    font-size: 12px;
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 0;
-    outline: none !important;
-  }
-`;
-
 export const DevConsole = () => {
   const [consoleRef, setConsoleRef] = useState<HTMLDivElement | null>(null);
+  const [code, setCode] = useState('');
+  const [history, setHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(0);
   const [lines, setLines] = useState<LineType[]>([
     {
       uid: uuidv4(),
@@ -133,6 +112,49 @@ export const DevConsole = () => {
     addLine()(LineTypeEnum.Debug, [`${name}: ${formatTime(duration)}`]);
   }, []);
 
+  const evalCode = useCallback(
+    (code: string) => {
+      setCode('');
+
+      if (code === 'clear') {
+        setLines([]);
+        setCode('');
+        startTransition(() => {
+          addLine()(LineTypeEnum.Debug, ['console cleared']);
+        });
+        return;
+      }
+
+      addLine()(LineTypeEnum.Eval, [code]);
+
+      try {
+        const result = eval(code);
+        addLine()(LineTypeEnum.Log, [result]);
+      } catch (err) {
+        addLine()(LineTypeEnum.Error, [err]);
+      } finally {
+        setHistoryIndex(0);
+        setHistory((prev) => [...prev, code]);
+        setCode('');
+      }
+    },
+    [setCode]
+  );
+
+  const prevCode = useCallback(() => {
+    setHistoryIndex((prev) => prev + 1);
+    startTransition(() => {
+      setCode(history[history.length - historyIndex - 1]);
+    });
+  }, [historyIndex]);
+
+  const nextCode = useCallback(() => {
+    setHistoryIndex((prev) => prev - 1);
+    startTransition(() => {
+      setCode(history[history.length - historyIndex + 1]);
+    });
+  }, [historyIndex]);
+
   const consoleExtension = useMemo(() => {
     return {
       log(...args: any) {
@@ -152,16 +174,17 @@ export const DevConsole = () => {
     };
   }, [addLine, startTimer, stopTimer]);
 
-  const originalConsole = useMemo(() => {
-    return {
+  const originalConsole = useMemo(
+    () => ({
       log: console.log,
       debug: console.debug,
       info: console.info,
       error: console.error,
       time: console.time,
       timeEnd: console.timeEnd,
-    };
-  }, []);
+    }),
+    []
+  );
 
   useLayoutEffect(() => {
     scrollToBottom();
@@ -181,6 +204,14 @@ export const DevConsole = () => {
         {lines.map((line) => (
           <ConsoleLine key={line.uid} {...line} />
         ))}
+
+        <ConsolePrompt
+          value={code}
+          onChange={setCode}
+          onCommit={evalCode}
+          onPrev={prevCode}
+          onNext={nextCode}
+        />
       </StyledDevConsole>
     </>
   );

@@ -2,6 +2,8 @@ import { debugString } from 'kit';
 import styled from 'styled-components';
 import { LineTypeEnum } from '../types/line-type.enum';
 
+console.log('ERROR', '<' + debugString(new Error('test')) + '>');
+
 const StyledValue = styled.pre<{ type: LineTypeEnum }>`
   cursor: pointer;
   transition: all 0.3s;
@@ -12,6 +14,9 @@ const StyledValue = styled.pre<{ type: LineTypeEnum }>`
   border: 1px solid transparent;
   border-radius: 3px;
   padding: 1px 3px;
+  white-space: pre-wrap; /* сохраняет переносы и пробелы */
+  word-wrap: break-word; /* старый способ, для совместимости */
+  overflow-wrap: break-word; /* современный стандарт */
 
   &:hover {
     border-color: ${({ type }) =>
