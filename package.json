@@ -28,7 +28,7 @@
     "typescript": "^5.4.0"
   },
   "dependencies": {
-    "kit": "2.0.24",
+    "kit": "^2.0.24",
     "uuid": "^11.1.0"
   }
 }
