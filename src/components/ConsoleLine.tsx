@@ -3,7 +3,9 @@ import { ConsoleValue } from './ConsoleValue';
 import { LineType } from '../types/line.type';
 import { LineTypeEnum } from '../types/line-type.enum';
 
-type ConsoleLineProps = LineType & {};
+type ConsoleLineProps = LineType & {
+  onValueClick: (value: any) => void;
+};
 
 const StyledLine = styled.div<{ type: LineTypeEnum }>`
   color: #90a4ae;
@@ -73,11 +75,19 @@ const StyledLine = styled.div<{ type: LineTypeEnum }>`
   }
 `;
 
-export const ConsoleLine = ({ values, type }: ConsoleLineProps) => {
+export const ConsoleLine = ({
+  values,
+  type,
+  onValueClick,
+}: ConsoleLineProps) => {
   return (
     <StyledLine type={type}>
       {values.map((value) => (
-        <ConsoleValue type={type} value={value} onClick={() => {}} />
+        <ConsoleValue
+          type={type}
+          value={value}
+          onClick={() => onValueClick(value)}
+        />
       ))}
     </StyledLine>
   );

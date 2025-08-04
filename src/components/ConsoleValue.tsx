@@ -1,6 +1,7 @@
 import { debugString } from 'kit';
 import styled from 'styled-components';
 import { LineTypeEnum } from '../types/line-type.enum';
+import { startTransition } from 'react';
 
 console.log('ERROR', '<' + debugString(new Error('test')) + '>');
 

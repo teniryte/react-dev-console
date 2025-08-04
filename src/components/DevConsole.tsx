@@ -6,6 +6,7 @@ import {
   useEffect,
   useLayoutEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { LineTypeEnum } from '../types/line-type.enum';
@@ -14,7 +15,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { formatTime } from '../util/format-time';
 import { ConsolePrompt } from './ConsolePrompt';
 
-const TIMERS: Record<string, number> = {};
+const STATE: {
+  timers: Record<string, number>;
+  tempCounter: number;
+} = {
+  timers: {},
+  tempCounter: 0,
+};
 
 const StyledDevConsole = styled.div`
   padding: 5px;
@@ -27,7 +34,7 @@ const StyledDevConsole = styled.div`
   background: oklch(20.8% 0.042 265.755);
   box-sizing: border-box;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 40px;
+  padding-bottom: 36px;
   color: #fff;
   overflow-y: auto;
 
@@ -57,6 +64,8 @@ export const DevConsole = () => {
   const [code, setCode] = useState('');
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(0);
+  const promptRef = useRef<{ focus: () => void }>(null);
+
   const [lines, setLines] = useState<LineType[]>([
     {
       uid: uuidv4(),
@@ -98,12 +107,22 @@ export const DevConsole = () => {
     []
   );
 
+  const storeTempValue = (value: any) => {
+    STATE.tempCounter++;
+    const key = `temp${STATE.tempCounter}`;
+    (window as any)[key] = value;
+    addLine()(LineTypeEnum.Debug, [`Stored as ${key}`]);
+    startTransition(() => {
+      promptRef.current?.focus();
+    });
+  };
+
   const startTimer = useCallback((name: string = 'default') => {
-    TIMERS[name] = Date.now();
+    STATE.timers[name] = Date.now();
   }, []);
 
   const stopTimer = useCallback((name: string = 'default') => {
-    const start = TIMERS[name];
+    const start = STATE.timers[name];
     if (!start) {
       return;
     }
@@ -202,10 +221,11 @@ export const DevConsole = () => {
     <>
       <StyledDevConsole ref={setConsoleRef}>
         {lines.map((line) => (
-          <ConsoleLine key={line.uid} {...line} />
+          <ConsoleLine key={line.uid} onValueClick={storeTempValue} {...line} />
         ))}
 
         <ConsolePrompt
+          ref={promptRef}
           value={code}
           onChange={setCode}
           onCommit={evalCode}
