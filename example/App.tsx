@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DevConsole } from '../src';
 
 function App() {
+  const [showConsole, setShowConsole] = useState(true);
+
   return (
     <div>
       <iframe
@@ -17,7 +19,7 @@ function App() {
         }}
         src="https://teniryte.ru"
       />
-      <DevConsole />
+      {showConsole && <DevConsole onClose={() => setShowConsole(false)} />}
     </div>
   );
 }

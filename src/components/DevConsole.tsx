@@ -14,6 +14,7 @@ import { ConsoleLine } from './ConsoleLine';
 import { v4 as uuidv4 } from 'uuid';
 import { formatTime } from '../util/format-time';
 import { ConsolePrompt } from './ConsolePrompt';
+import { ConsoleHeader } from './ConsoleHeader';
 
 const STATE: {
   timers: Record<string, number>;
@@ -59,7 +60,7 @@ const StyledDevConsole = styled.div`
   scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 `;
 
-export const DevConsole = () => {
+export const DevConsole = ({ onClose }: { onClose?: () => void }) => {
   const [consoleRef, setConsoleRef] = useState<HTMLDivElement | null>(null);
   const [code, setCode] = useState('');
   const [history, setHistory] = useState<string[]>([]);
@@ -131,16 +132,20 @@ export const DevConsole = () => {
     addLine()(LineTypeEnum.Debug, [`${name}: ${formatTime(duration)}`]);
   }, []);
 
+  const clearConsole = useCallback(() => {
+    setLines([]);
+    setCode('');
+    startTransition(() => {
+      addLine()(LineTypeEnum.Debug, ['console cleared']);
+    });
+  }, []);
+
   const evalCode = useCallback(
     (code: string) => {
       setCode('');
 
       if (code === 'clear') {
-        setLines([]);
-        setCode('');
-        startTransition(() => {
-          addLine()(LineTypeEnum.Debug, ['console cleared']);
-        });
+        clearConsole();
         return;
       }
 
@@ -233,6 +238,7 @@ export const DevConsole = () => {
           onNext={nextCode}
         />
       </StyledDevConsole>
+      <ConsoleHeader onClear={clearConsole} onClose={onClose} />
     </>
   );
 };

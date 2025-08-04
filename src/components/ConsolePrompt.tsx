@@ -5,6 +5,9 @@ import {
   useRef,
 } from 'react';
 import styled from 'styled-components';
+import { AngleRightIcon } from '../icons/AngleRightIcon';
+
+const ACTION_KEYS = ['ArrowUp', 'ArrowDown', 'Enter'];
 
 const StyledPrompt = styled.div`
   box-sizing: border-box;
@@ -26,36 +29,37 @@ const StyledPrompt = styled.div`
     outline: none !important;
     color: oklch(86.9% 0.022 252.894);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding-left: 30px;
-
-    &:focus {
-      // border-top: 2px solid rgba(255, 255, 255, 0.1);
-      // border-top: 1px solid oklch(68.1% 0.162 75.834);
-      // border-position: ;
-      // background: oklch(37.2% 0.044 257.287);
-    }
+    padding-left: 34px;
 
     &::placeholder {
       color: rgba(255, 255, 255, 0.2);
     }
 
     &:focus + * {
-      color: oklch(68.1% 0.162 75.834);
+      svg {
+        fill: oklch(68.1% 0.162 75.834);
+      }
     }
   }
 `;
 
-const StyledPrefix = styled.div`
+const StyledPrefix = styled.div<{ isFocused: boolean }>`
   position: absolute;
   left: 15px;
-  top: 12px;
+  top: 12.5px;
   width: 1px;
-  // color: oklch(68.1% 0.162 75.834);
   color: rgba(255, 255, 255, 0.2);
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 11px;
   transition: all 0.3s;
+
+  svg {
+    width: 10px;
+    height: 10px;
+    fill: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s;
+  }
 `;
 
 export const ConsolePrompt = forwardRef(
@@ -84,6 +88,10 @@ export const ConsolePrompt = forwardRef(
     }));
 
     const inputKeyPressed = (ev: React.KeyboardEvent<HTMLInputElement>) => {
+      if (!ACTION_KEYS.includes(ev.key)) {
+        return;
+      }
+
       if (ev.key === 'Enter') {
         onCommit(value);
       }
@@ -115,7 +123,10 @@ export const ConsolePrompt = forwardRef(
           ref={inputRef}
           placeholder="Enter your code..."
         />
-        <StyledPrefix>&gt;</StyledPrefix>
+
+        <StyledPrefix isFocused={false}>
+          <AngleRightIcon />
+        </StyledPrefix>
       </StyledPrompt>
     );
   }

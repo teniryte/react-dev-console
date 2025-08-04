@@ -1,6 +1,6 @@
 {
   "name": "react-dev-console",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An external debug console component for React apps",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
@@ -26,7 +26,7 @@
     "typescript": "^5.4.0"
   },
   "dependencies": {
-    "kit": "2.0.18",
+    "kit": "2.0.19",
     "uuid": "^11.1.0"
   }
 }

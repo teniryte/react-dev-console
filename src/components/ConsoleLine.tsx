@@ -9,9 +9,7 @@ type ConsoleLineProps = LineType & {
 
 const StyledLine = styled.div<{ type: LineTypeEnum }>`
   color: #90a4ae;
-  // border-bottom: 1px dotted rgba(255, 255, 255, 0.1);
   line-height: 1.1em;
-  // padding-bottom: 5px;
   margin-bottom: 3px;
   padding: 4px 5px;
   border-radius: 4px;
@@ -59,14 +57,7 @@ const StyledLine = styled.div<{ type: LineTypeEnum }>`
 
   &::before {
     content: '$';
-    display: ${({ type }) => {
-      switch (type) {
-        case LineTypeEnum.Eval:
-          return 'inline';
-        default:
-          return 'none';
-      }
-    }};
+    display: ${({ type }) => (type === LineTypeEnum.Eval ? 'inline' : 'none')};
     position: static;
     color: rgba(255, 255, 255, 0.4);
     border: 1px solid transparent;

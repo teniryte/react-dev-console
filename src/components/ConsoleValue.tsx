@@ -1,9 +1,6 @@
 import { debugString } from 'kit';
 import styled from 'styled-components';
 import { LineTypeEnum } from '../types/line-type.enum';
-import { startTransition } from 'react';
-
-console.log('ERROR', '<' + debugString(new Error('test')) + '>');
 
 const StyledValue = styled.pre<{ type: LineTypeEnum }>`
   cursor: pointer;
@@ -15,9 +12,9 @@ const StyledValue = styled.pre<{ type: LineTypeEnum }>`
   border: 1px solid transparent;
   border-radius: 3px;
   padding: 1px 3px;
-  white-space: pre-wrap; /* сохраняет переносы и пробелы */
-  word-wrap: break-word; /* старый способ, для совместимости */
-  overflow-wrap: break-word; /* современный стандарт */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 
   &:hover {
     border-color: ${({ type }) =>
@@ -36,7 +33,7 @@ export const ConsoleValue = ({
   type: LineTypeEnum;
   onClick: () => void;
 }) => {
-  const s = debugString(value);
+  const displayString = debugString(value);
 
   const valueClicked = () => {
     if ([LineTypeEnum.Error, LineTypeEnum.Eval].includes(type)) {
@@ -47,7 +44,7 @@ export const ConsoleValue = ({
 
   return (
     <StyledValue type={type} onClick={valueClicked}>
-      {s}
+      {displayString}
     </StyledValue>
   );
 };
