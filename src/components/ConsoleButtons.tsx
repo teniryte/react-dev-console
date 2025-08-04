@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { ClearIcon } from '../icons/ClearIcon';
 import { CloseIcon } from '../icons/CloseIcon';
 
-const StyledHeader = styled.div`
+const StyledButtons = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -36,7 +36,7 @@ const StyledHeaderButton = styled.button`
   }
 `;
 
-export const ConsoleHeader = ({
+export const ConsoleButtons = ({
   onClear,
   onClose,
 }: {
@@ -44,13 +44,13 @@ export const ConsoleHeader = ({
   onClose?: () => void;
 }) => {
   return (
-    <StyledHeader>
+    <StyledButtons>
       <StyledHeaderButton title="Clear console" onClick={onClear}>
         <ClearIcon />
       </StyledHeaderButton>
       <StyledHeaderButton title="Close console" onClick={onClose}>
         <CloseIcon />
       </StyledHeaderButton>
-    </StyledHeader>
+    </StyledButtons>
   );
 };

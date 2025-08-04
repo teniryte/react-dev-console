@@ -14,7 +14,7 @@ import { ConsoleLine } from './ConsoleLine';
 import { v4 as uuidv4 } from 'uuid';
 import { formatTime } from '../util/format-time';
 import { ConsolePrompt } from './ConsolePrompt';
-import { ConsoleHeader } from './ConsoleHeader';
+import { ConsoleButtons } from './ConsoleButtons';
 
 const STATE: {
   timers: Record<string, number>;
@@ -111,6 +111,7 @@ export const MobileConsole = ({ onClose }: { onClose?: () => void }) => {
   const clearConsole = useCallback(() => {
     setLines([]);
     setCode('');
+
     startTransition(() => {
       addLine()(LineTypeEnum.Debug, ['console cleared']);
     });
@@ -135,7 +136,6 @@ export const MobileConsole = ({ onClose }: { onClose?: () => void }) => {
       } finally {
         setHistoryIndex(0);
         setHistory((prev) => [...prev, code]);
-        setCode('');
       }
     },
     [setCode]
@@ -218,7 +218,7 @@ export const MobileConsole = ({ onClose }: { onClose?: () => void }) => {
           onNext={nextHistoryCode}
         />
       </StyledMobileConsole>
-      <ConsoleHeader onClear={clearConsole} onClose={onClose} />
+      <ConsoleButtons onClear={clearConsole} onClose={onClose} />
     </>
   );
 };
