@@ -24,7 +24,7 @@ const STATE: {
   tempCounter: 0,
 };
 
-const StyledDevConsole = styled.div`
+const StyledMobileConsole = styled.div`
   padding: 5px;
   position: fixed;
   left: 0;
@@ -60,40 +60,14 @@ const StyledDevConsole = styled.div`
   scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 `;
 
-export const DevConsole = ({ onClose }: { onClose?: () => void }) => {
+export const MobileConsole = ({ onClose }: { onClose?: () => void }) => {
   const [consoleRef, setConsoleRef] = useState<HTMLDivElement | null>(null);
   const [code, setCode] = useState('');
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const promptRef = useRef<{ focus: () => void }>(null);
 
-  const [lines, setLines] = useState<LineType[]>([
-    {
-      uid: uuidv4(),
-      values: ['This is log'],
-      type: LineTypeEnum.Log,
-    },
-    {
-      uid: uuidv4(),
-      values: ['This is debug'],
-      type: LineTypeEnum.Debug,
-    },
-    {
-      uid: uuidv4(),
-      values: ['This is info'],
-      type: LineTypeEnum.Info,
-    },
-    {
-      uid: uuidv4(),
-      values: ['This is eval'],
-      type: LineTypeEnum.Eval,
-    },
-    {
-      uid: uuidv4(),
-      values: ['console.log("Hello, world!")'],
-      type: LineTypeEnum.Error,
-    },
-  ]);
+  const [lines, setLines] = useState<LineType[]>([]);
 
   const scrollToBottom = useCallback(() => {
     if (consoleRef) {
@@ -103,7 +77,9 @@ export const DevConsole = ({ onClose }: { onClose?: () => void }) => {
 
   const addLine = useCallback(
     () => (type: LineTypeEnum, values: any[]) => {
-      setLines((prev) => [...prev, { uid: uuidv4(), type, values }]);
+      setTimeout(() => {
+        setLines((prev) => [...prev, { uid: uuidv4(), type, values }]);
+      }, 0);
     },
     []
   );
@@ -165,19 +141,23 @@ export const DevConsole = ({ onClose }: { onClose?: () => void }) => {
     [setCode]
   );
 
-  const prevCode = useCallback(() => {
-    setHistoryIndex((prev) => prev + 1);
+  const prevHistoryCode = useCallback(() => {
+    setHistoryIndex((prev) => (prev + 1 < history.length ? prev + 1 : prev));
     startTransition(() => {
-      setCode(history[history.length - historyIndex - 1]);
+      const code = history[history.length - historyIndex - 1];
+      if (!code) return;
+      setCode(code);
     });
-  }, [historyIndex]);
+  }, [historyIndex, history]);
 
-  const nextCode = useCallback(() => {
-    setHistoryIndex((prev) => prev - 1);
+  const nextHistoryCode = useCallback(() => {
+    setHistoryIndex((prev) => (prev - 1 > 0 ? prev - 1 : prev));
     startTransition(() => {
-      setCode(history[history.length - historyIndex + 1]);
+      const code = history[history.length - historyIndex];
+      if (!code) return;
+      setCode(code);
     });
-  }, [historyIndex]);
+  }, [historyIndex, history]);
 
   const consoleExtension = useMemo(() => {
     return {
@@ -224,7 +204,7 @@ export const DevConsole = ({ onClose }: { onClose?: () => void }) => {
 
   return (
     <>
-      <StyledDevConsole ref={setConsoleRef}>
+      <StyledMobileConsole ref={setConsoleRef}>
         {lines.map((line) => (
           <ConsoleLine key={line.uid} onValueClick={storeTempValue} {...line} />
         ))}
@@ -234,10 +214,10 @@ export const DevConsole = ({ onClose }: { onClose?: () => void }) => {
           value={code}
           onChange={setCode}
           onCommit={evalCode}
-          onPrev={prevCode}
-          onNext={nextCode}
+          onPrev={prevHistoryCode}
+          onNext={nextHistoryCode}
         />
-      </StyledDevConsole>
+      </StyledMobileConsole>
       <ConsoleHeader onClear={clearConsole} onClose={onClose} />
     </>
   );

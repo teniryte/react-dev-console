@@ -73,8 +73,9 @@ export const ConsoleLine = ({
 }: ConsoleLineProps) => {
   return (
     <StyledLine type={type}>
-      {values.map((value) => (
+      {values.map((value, index) => (
         <ConsoleValue
+          key={index}
           type={type}
           value={value}
           onClick={() => onValueClick(value)}

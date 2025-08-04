@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DevConsole } from '../src';
+import { MobileConsole } from '../src';
 
 function App() {
   const [showConsole, setShowConsole] = useState(true);
@@ -19,7 +19,7 @@ function App() {
         }}
         src="https://teniryte.ru"
       />
-      {showConsole && <DevConsole onClose={() => setShowConsole(false)} />}
+      {showConsole && <MobileConsole onClose={() => setShowConsole(false)} />}
     </div>
   );
 }

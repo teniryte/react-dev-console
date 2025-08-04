@@ -1,1 +1,1 @@
-export { DevConsole } from './components/DevConsole';
+export { MobileConsole } from './components/MobileConsole';
