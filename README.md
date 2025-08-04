@@ -15,6 +15,16 @@ A lightweight, debug console component for React applications that provides an e
 - 🔧 **Interactive REPL** - Execute JavaScript code directly in the console
 
 
+</td>
+<td width="40%" align="center">
+
+<img src="https://mobile-console.teniryte.ru/demo.png" width="500">
+
+</td>
+</tr>
+</table>
+
+
 ## Installation
 
 ```bash
@@ -36,16 +46,6 @@ function App() {
   );
 }
 ```
-
-</td>
-<td width="40%" align="center">
-
-<img src="https://mobile-console.teniryte.ru/demo.png" width="500">
-
-</td>
-</tr>
-</table>
-
 
 ## License
 
