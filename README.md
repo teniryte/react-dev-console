@@ -10,6 +10,8 @@
 
 A lightweight, debug console component for React applications that provides an external debugging interface similar to browser developer tools. Perfect for mobile development, testing, and debugging React apps in various environments.
 
+> When the component mounts, the global `console` object methods (`log`, `info`, `debug`, `time`, `timeEnd`) are replaced with MobileConsole methods. When the component unmounts, the original methods are restored. **Only for dev and test environments**!
+
 ## Features
 
 - 🚀 **External Debug Console** - Overlay console that doesn't interfere with your app's UI
